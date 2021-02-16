@@ -20,10 +20,10 @@
 
             <div class="card shadow mb-4">
                 <div class="card-profile-image mt-4">
-                    <figure class="rounded-circle avatar avatar font-weight-bold" style="font-size: 60px; height: 180px; width: 180px;" data-initial="{{ Auth::user()->name[0] }}"></figure>
+                    <img src="/uploads/profile/{{ Auth::user()->profile_img}}" style="width:150px; height:150px; border-radius:50%; margin-right: 25px" >
+
                 </div>
                 <div class="card-body">
-
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="text-center">
@@ -68,10 +68,13 @@
 
                 <div class="card-body">
 
-                    <form method="POST" action="{{ route('profile.update') }}" autocomplete="off">
+                    <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-                        <input type="hidden" name="_method" value="PUT">
+{{--                        <input type="hidden" name="_method" value="PUT">--}}
+{{--                        @csrf--}}
+{{--                        <input type="file" name="image"/>--}}
+{{--                        <input type="submit" value="Upload"/>--}}
 
                         <h6 class="heading-small text-muted mb-4">User information</h6>
 
@@ -99,7 +102,13 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="profile">Profile <span class="small text-danger"></span></label>
+                                        <input type="file" id="profile_img"  name="profile_img"></div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-lg-4">
                                     <div class="form-group focused">
