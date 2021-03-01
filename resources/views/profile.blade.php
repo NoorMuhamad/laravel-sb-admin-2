@@ -20,7 +20,7 @@
 
             <div class="card shadow mb-4">
                 <div class="card-profile-image mt-4">
-                    <img src="/uploads/profile/{{ Auth::user()->profile_img}}" style="width:150px; height:150px; border-radius:50%; margin-right: 25px" >
+                    <img src="{{ asset('storage/uploads/profile/'. Auth::user()->profile_img)}}" style="width:150px; height:150px; border-radius:50%; margin-right: 25px" >
 
                 </div>
                 <div class="card-body">

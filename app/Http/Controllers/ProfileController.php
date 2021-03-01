@@ -26,7 +26,6 @@ class ProfileController extends Controller
             'name' => 'required|string|max:255',
             'last_name' => 'nullable|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . Auth::user()->id,
-            'profile_img'=>'nullable|string|max:255',
             'current_password' => 'nullable|required_with:new_password',
             'new_password' => 'nullable|min:8|max:12|required_with:current_password',
             'password_confirmation' => 'nullable|min:8|max:12|required_with:new_password|same:new_password'
@@ -37,17 +36,13 @@ class ProfileController extends Controller
         $user->name = $request->input('name');
         $user->last_name = $request->input('last_name');
         $user->email = $request->input('email');
+
+
         if($request->hasFile('profile_img')){
-            $avatar = $request->file('profile_img');
-            $filename = time() . '.' . $avatar->getClientOriginalName();
-            Image::make($avatar)->resize(300, 300)->save( public_path('/uploads/profile/' . $filename ) );
-            $user->profile_img = settype($filename,"string");
+            $filename = $request->profile_img->getClientOriginalName();
+            $request->profile_img->storeAs('/uploads/profile/',$filename,'public');
+            $user->profile_img= $filename;
         }
-//        if($request->hasFile('profile_img')){
-//            $filename = $request->profile_img->getClientOriginalName();
-//            $request->profile_img->storeAs('images',$filename,'public');
-//            $user->profile_img=settype($filename, 'string');
-//        }
 
         if (!is_null($request->input('current_password'))) {
             if (Hash::check($request->input('current_password'), $user->password)) {

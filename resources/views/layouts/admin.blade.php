@@ -242,7 +242,7 @@
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
-                            <img src="/uploads/profile/{{ Auth::user()->profile_img}}" style="width:32px; height:32px; border-radius:50%;" >
+                            <img src="{{ asset('storage/uploads/profile/'. Auth::user()->profile_img)}}" style="width:32px; height:32px; border-radius:50%;" >
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
