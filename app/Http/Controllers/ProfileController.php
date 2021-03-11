@@ -30,26 +30,28 @@ class ProfileController extends Controller
             'new_password' => 'nullable|min:8|max:12|required_with:current_password',
             'password_confirmation' => 'nullable|min:8|max:12|required_with:new_password|same:new_password'
         ]);
-
-
         $user = User::findOrFail(Auth::user()->id);
         $user->name = $request->input('name');
         $user->last_name = $request->input('last_name');
         $user->email = $request->input('email');
-
-
-        if($request->hasFile('profile_img')){
-            $filename = $request->profile_img->getClientOriginalName();
-            $request->profile_img->storeAs('/uploads/profile/',$filename,'public');
-            $user->profile_img= $filename;
-        }
-
         if (!is_null($request->input('current_password'))) {
             if (Hash::check($request->input('current_password'), $user->password)) {
                 $user->password = $request->input('new_password');
             } else {
                 return redirect()->back()->withInput();
             }
+        }
+        $user->save();
+
+        return redirect()->route('profile')->withSuccess('Profile updated successfully.');
+    }
+    public function img_update(Request $request){
+
+        $user = User::findOrFail(Auth::user()->id);
+        if($request->hasFile('profile_img')){
+            $filename = $request->profile_img->getClientOriginalName();
+            $request->profile_img->storeAs('/uploads/profile/',$filename,'public');
+            $user->profile_img= $filename;
         }
         $user->save();
 

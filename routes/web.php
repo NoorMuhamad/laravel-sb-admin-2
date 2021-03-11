@@ -17,13 +17,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/profile', 'ProfileController@index')->name('profile');
-Route::post('/profile', 'ProfileController@update')->name('profile.update');
-
+Route::post('/profiles', 'ProfileController@update')->name('profile.update');
 Route::get('/about', function () {
     return view('about');
 })->name('about');
+Route::post('/profile','ProfileController@img_update')->name('profile.img_update');

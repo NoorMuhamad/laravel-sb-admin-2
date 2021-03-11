@@ -1,5 +1,44 @@
 @extends('layouts.admin')
-
+<style>
+#profile_img{
+    position: absolute;
+    bottom: 0;
+    outline: none;
+    color: transparent;
+    width: 25%;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: 0.5s;
+    background: rgba(0,0,0,0.5);
+    opacity: 0;
+    transform: translate(-155px, -180px);
+}
+    #profile_img::-webkit-file-upload-button{
+        visibility: hidden;
+    }
+    #profile_img::before{
+        content: '\f030';
+        font-family: fontAwesome;
+        font-size: 15px;
+        color: white;
+        display: inline-block;
+        -webkit-user-select: none;
+        text-align: center;
+    }
+#profile_img::after{
+    content:'Update';
+    font-family: 'arial';
+    font-weight: bold;
+    color: #fff;
+    display: block;
+    /*top:70px;*/
+    font-size: 14px;
+    position: absolute;
+}
+    #profile_img:hover{
+        opacity: 1;
+    }
+</style>
 @section('main-content')
     <!-- Page Heading -->
     <h1 class="h3 mb-4 text-gray-800">{{ __('Profile') }}</h1>
@@ -18,10 +57,13 @@
 
         <div class="col-lg-4 order-lg-2">
 
-            <div class="card shadow mb-4">
-                <div class="card-profile-image mt-4">
-                    <img src="{{ asset('storage/uploads/profile/'. Auth::user()->profile_img)}}" style="width:150px; height:150px; border-radius:50%; margin-right: 25px" >
-
+            <div class="card shadow mb-4" >
+                <div class="card-profile-image mt-4" >
+                    <form method="POST" name="submitFormImg" action="{{route('profile.img_update') }}" enctype="multipart/form-data" >
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <img src="{{ asset('storage/uploads/profile/'. Auth::user()->profile_img)}}"  id="img" alt="No Image" style="width:150px; height:150px; border-radius:50%; margin-right: 25px ">
+                        <input type="file" id="profile_img"  name="profile_img" onchange="readURL(this);"   >
+                    </form>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -68,16 +110,9 @@
 
                 <div class="card-body">
 
-                    <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+                    <form method="POST" name="submitForm" action="{{route('profile.update') }}" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-{{--                        <input type="hidden" name="_method" value="PUT">--}}
-{{--                        @csrf--}}
-{{--                        <input type="file" name="image"/>--}}
-{{--                        <input type="submit" value="Upload"/>--}}
-
                         <h6 class="heading-small text-muted mb-4">User information</h6>
-
                         <div class="pl-lg-4">
                             <div class="row">
                                 <div class="col-lg-6">
@@ -102,13 +137,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label class="form-control-label" for="profile">Profile <span class="small text-danger"></span></label>
-                                        <input type="file" id="profile_img"  name="profile_img"></div>
-                                </div>
-                            </div>
+                      <input type="hidden" id="profile_img"  name="profile_img"  >
+
                             <div class="row">
                                 <div class="col-lg-4">
                                     <div class="form-group focused">
@@ -130,12 +160,11 @@
                                 </div>
                             </div>
                         </div>
-
                         <!-- Button -->
                         <div class="pl-lg-4">
                             <div class="row">
                                 <div class="col text-center">
-                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    <button  type="submit" class="btn btn-primary">Save Changes</button>
                                 </div>
                             </div>
                         </div>
@@ -148,5 +177,17 @@
         </div>
 
     </div>
-
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#img')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+            document.forms["submitFormImg"].submit();
+        }
+    </script>
 @endsection
